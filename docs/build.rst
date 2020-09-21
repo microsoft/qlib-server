@@ -1,6 +1,6 @@
 .. _build:
 ==============================
-How to Build a ``Qlib-Server``
+``Qlib-Server`` Building
 ==============================
 
 Introduction
