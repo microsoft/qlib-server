@@ -1,0 +1,64 @@
+provider_uri: <QLIB_DATA>
+flask_server: <FLASK_SERVER_HOST>
+flask_port: 9710
+queue_host: <QUEUE_HOST>
+queue_user: <QUEUE_USER>
+queue_pwd: <QUEUE_PASS>
+task_queue: 'task_queue'
+message_queue: 'message_queue'
+max_concurrency: 10
+max_process: 10
+redis_host: <REDIS_HOST>
+redis_port: 6379
+redis_task_db: 1
+auto_update: 0
+update_time: '23:45'
+client_version: '>=0.4.0'
+server_version: '>=0.4.0'
+dataset_cache_dir_name: dataset_cache
+features_cache_dir_name: features_cache
+logging_level: INFO
+logging_config:
+  version: 1
+  formatters:
+    logger_format:
+      format: '[%(process)s:%(threadName)s](%(asctime)s) %(levelname)s - %(name)s - [%(filename)s:%(lineno)d] - %(message)s'
+
+  filters:
+    mail_filter:
+      (): qlib_server.log.LogFilter
+      param:
+        - '.*?WARN: data not found for.*?'
+
+  handlers:
+    console:
+      class: logging.StreamHandler
+      level: DEBUG
+      formatter: logger_format
+
+    file:
+      class: logging.FileHandler
+      mode: w
+      filename: qlib_server.log
+      level: INFO
+      formatter: logger_format
+
+    others:
+      class: logging.StreamHandler
+      level: WARNING
+      formatter: logger_format
+
+    other_file:
+      class: logging.FileHandler
+      mode: w
+      filename: qlib_server_other_module.log
+      level: WARNING
+      formatter: logger_format
+  loggers:
+    qlib:
+      level: DEBUG
+      handlers:
+        - console
+  root:
+    handlers:
+      - others

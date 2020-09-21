@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  nfs-server:
+    image: itsthenetwork/nfs-server-alpine:12
+    privileged: true
+    restart: always
+    volumes:
+      - ${QLIB_DATA}:/nfsshare
+    environment:
+      - SHARED_DIRECTORY=/nfsshare
+    ports:
+      - "111:111/udp"
+      - "2049:2049"
+  rabbitmq:
+    image: rabbitmq:3.7.27-rc.1-management-alpine
+    restart: always
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+  redis:
+    image: redis:alpine3.12
+    restart: always
+  qlib-server:
+    build: 
+      context: .
+      dockerfile: ./docker_support/Dockerfile
+      args:
+        - QUEUE_HOST=rabbitmq
+        - REDIS_HOST=redis
+        - QUEUE_USER=${RABBITMQ_DEFAULT_USER}
+        - QUEUE_PASS=${RABBITMQ_DEFAULT_PASS}
+        - QLIB_DATA=${QLIB_DATA}
+        - FLASK_SERVER_HOST=${FLASK_SERVER_HOST}
+    volumes:
+      - ${QLIB_DATA}:${QLIB_DATA}
+    depends_on:
+      - redis
+      - rabbitmq
+      - nfs-server
+    restart: always
+    ports:
+      - 9710:9710
+    command: ["./wait-for-it/wait-for-it.sh", rabbitmq:15672, "--", "python", "main.py", "-c", "config_template.yaml"]
+
