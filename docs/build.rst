@@ -33,9 +33,10 @@ Deploy ``Qlib-Server`` with docker-compose according to the following processes:
 
         git clone https://github.com/microsoft/qlib-server
         cd qlib-server
-        sudo docker-compose up -d -f docker_support/docker_compose.yaml
+        sudo docker-compose -f docker_support/docker-compose.yaml --env-file docker_support/docker-compose.env build
+        sudo docker-compose -f docker_support/docker-compose.yaml --env-file docker_support/docker-compose.env up -d
         # Use the following command to track the log
-        sudo docker-compose -f docker_support/docker_compose.yaml logs -f
+        sudo docker-compose -f docker_support/docker-compose.yaml logs -f
 
 
 One-click Deployment in ``Azure``
@@ -376,6 +377,7 @@ Build ``Qlib-Server`` with Dockerfile according to the following processes:
                 REDIS_HOST=redis_server \
                 QUEUE_USER=rabbitmq_user \
                 QUEUE_PASS=rebbitmq_password \
-                FLASK_SERVER_HOST=127.0.0.1
+                FLASK_SERVER_HOST=127.0.0.1 \
+                QLIB_CODE=/code
         sudo docker run qlib-server
 
