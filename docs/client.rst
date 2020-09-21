@@ -1,48 +1,49 @@
 
 =================================================
-How to Use ``Qlib`` in ``Client/Server`` Mode
+Using ``Qlib`` in ``online`` Mode
 =================================================
 
 Introduction
 ================
-In the `Qlib document <TODO_URL>`_, the ``Local`` mode has been introduced. In addition to ``Local`` mode, users can use ``Qlib`` in ``Client/Server`` mode.
+In the `Qlib document <TODO_URL>`_, the ``offline`` mode has been introduced. In addition to ``offline`` mode, users can use ``Qlib`` in ``online`` mode.
 
-``Client/Server`` mode is designed to solve the following problems:
+The ``online`` mode is designed to solve the following problems:
 
 - Manage the data in a centralized way. Users don't have to manage data of different versions.
 - Reduce the amount of cache to be generated.
 - Make the data can be accessed in a remote way.
 
-In ``Client/Server`` mode, the data provided for ``Qlib`` will be managed in a centralized manner by ``Qlib-Server``.
+In ``online`` mode, the data provided for ``Qlib`` will be managed in a centralized manner by ``Qlib-Server``.
 
-Use ``Qlib`` in ``Client/Server`` Mode
+Using ``Qlib`` in ``online`` Mode
 =========================================
 
-Use ``Qlib`` in ``Client/Server`` mode according to the following processes:
+Use ``Qlib`` in ``online`` mode according to the following steps:
 
 - Open ``NFS`` Features in ``Qlib`` Client
-- Initialize ``Qlib`` in ``Client/Server`` Mode
+- Initialize ``Qlib`` in ``online`` Mode
 
-Open ``NFS`` Features in ``Qlib`` Client
+Opening ``NFS`` Features in ``Qlib`` Client
 ----------------------------------------
 
-- If running on Linux, ``nfs-common`` must be installed on the server where the client is located, execute:
+- If running on Linux, users need tp install ``nfs-common`` on the client, execute:
     .. code-block:: 
         
         sudo apt install nfs-common
+
 - If running on Windows, do as follows.
     - Open ``Programs and Features``.
     - Click ``Turn Windows features on or off``.
     - Scroll down and check the option ``Services for NFS``, then click OK
     Reference address: https://graspingtech.com/mount-nfs-share-windows-10/
 
-Initialize ``Qlib`` in ``Client/Server`` Mode
+Initializing ``Qlib`` in ``online`` Mode
 -----------------------------------------------
 
-If users want to use ``Qlib`` in ``client/Server`` mode, they can choose either of the following two methods to initialize ``Qlib``:
+If users want to use ``Qlib`` in ``online`` mode, they can choose either of the following two methods to initialize ``Qlib``:
 
 - Initialize ``Qlib`` with configuration file
-- Initialize ``Qlib`` with configuration parameters
+- Initialize ``Qlib`` with arguments
 
 Configuration File
 -------------------
@@ -125,10 +126,10 @@ Initialize ``Qlib`` with parameters configuration file as follows.
 
     
 
-Configuration Parameters
+Arguments
 --------------------------
 
-Initialize ``Qlib`` with parameters as follows.
+Initialize ``Qlib`` with arguments as follows.
 
 .. code-block:: python
 
@@ -165,7 +166,7 @@ Initialize ``Qlib`` with parameters as follows.
 
     If running ``Qlib`` on Windows, users should write correct **mount_path**.
 
-    The configuration parameters can be:
+    The arguments can be:
 
     .. code-block:: python
 
