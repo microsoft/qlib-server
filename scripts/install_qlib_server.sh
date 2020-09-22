@@ -60,7 +60,7 @@ fi
 
 # install qlib server
 cd $CODE_DIR
-git clone -b release-0.2.0 $QLIB_SERVER
+git clone $QLIB_SERVER
 cd qlib-server
 sudo docker-compose -f docker_support/docker-compose.yaml --env-file docker_support/docker-compose.env build
 sudo docker-compose -f docker_support/docker-compose.yaml --env-file docker_support/docker-compose.env up -d
