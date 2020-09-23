@@ -12,6 +12,7 @@ With `Qlib-Server`, you can use `Qlib` in `Online` mode. The `Online` mode is de
   - [Deployment](#deployment)
     - [One-click Deployment](#one-click-deployment)
     - [Step-by-Step Deployment](#step-by-step-deployment)
+  - [Using Qlib in Online Mode](#using-qlib-in-online-mode)
 - [More About Qlib](#more-about-qlib)
 - [Contributing](#contributing)
 
@@ -29,7 +30,7 @@ The `Client/Server` framework of `Qlib` is based on `WebSocket` considering its 
 # Quick start
 
 
-## Installation
+## Deployment
 
 ### One-click Deployment
 
@@ -44,7 +45,7 @@ Deploy `Qlib-Server` with `docker-compose` according to the following processes:
 
 * Install `docker`, please refer to [Docker Installation](https://docs.docker.com/engine/install).
 * Install `docker-compose`, please refer to [Docker-compose Installation](https://docs.docker.com/compose/install/).
-- Run the following command to deploy `Qlib-Server`:
+* Run the following command to deploy `Qlib-Server`:
 
     ```bash
       git clone https://github.com/microsoft/qlib-server
@@ -55,8 +56,7 @@ Deploy `Qlib-Server` with `docker-compose` according to the following processes:
       sudo docker-compose -f docker_support/docker-compose.yaml logs -f
     ```
 
-One-click Deployment in `Azure`
---------------------------------------------
+#### One-click Deployment in `Azure`
 
 Firstly, You need to have an `Azure` account to deploy `Qlib-Server` in `Azure`. Then you can deploy `Qlib-Server` in `Azure` according to the following processes:
 
@@ -87,7 +87,7 @@ Firstly, You need to have an `Azure` account to deploy `Qlib-Server` in `Azure`.
             --conf_path azure_conf.yaml
     ```
 
-To know more about one-click Deployment, please refer to [Qlib-Server One-click Deplyment](https://qlib-server.readthedocs.io/en/latest/build.html#one-click-deployment).
+To know more about one-click Deployment, please refer to [Qlib-Server One-click Deployment](https://qlib-server.readthedocs.io/en/latest/build.html#one-click-deployment).
 
 ### Step-by-step Deployment
 
