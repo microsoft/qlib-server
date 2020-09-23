@@ -1,19 +1,23 @@
 .. _server:
-=================================
-``Qlib Client/Server`` Framework 
-=================================
+===========================================
+``Qlib-Server``: Quant Library Data Server
+===========================================
 .. currentmodule:: qlib_server
 
 Introduction
 ==================
+``Qlib-Server`` is the assorted server system for ``Qlib``, which utilizes ``Qlib`` for basic calculations and provides extensive server system and cache mechanism. With ``Qlib-Server``, the data provided for ``Qlib`` can be managed in a centralized manner.
 
-The ``Client/Server`` framework of ``Qlib`` is based on ``WebSocket`` considering its capability of **bidirectional communication** between client and server in **async** mode.
 
 Framework
 ==================
 
 .. image:: ./_static/img/framework.png
-    :alt: Framework
+    :align: center
+
+
+The ``Client/Server`` framework of ``Qlib`` is based on ``WebSocket`` considering its capability of **bidirectional communication** between client and server in **async** mode.
+
 
 
 ``Qlib-Server`` is based on `Flash <http://flask.pocoo.org/>`_, which is a micro-framework for Python and here `Flask-SocketIO <https://flask-socketio.readthedocs.io>`_ is used for websocket connection. 

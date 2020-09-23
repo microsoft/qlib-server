@@ -1,23 +1,137 @@
-QLibServer is the assorted server system for QLib, which utilizes QLib for basic calculations and provides extensive server system and cache mechanism. With QLibServer, the data provided for QLib can be managed in a centralized manner.
+`Qlib-Server` is the assorted server system for `Qlib`, which utilizes `Qlib` for basic calculations and provides extensive server system and cache mechanism. With `Qlib-Server`, the data provided for `Qlib` can be managed in a centralized manner.
 
+With `Qlib-Server`, you can use `Qlib` in `Online` mode. The `Online` mode is designed to solve the following problems:
+
+* Manage the data in a centralized way. You don't have to manage data of different versions.
+* Reduce the amount of cache to be generated.
+* Make the data can be accessed in a remote way.
 
 
 - [Framework of qlib-erver](#framework-of-qlib-server)
 - [Quick start](#quick-start)
-  - [Installation](#installation)
+  - [Deployment](#deployment)
+    - [One-click Deployment](#one-click-deployment)
+    - [Step-by-Step Deployment](#step-by-step-deployment)
 - [More About Qlib](#more-about-qlib)
+- [Contributing](#contributing)
 
 
-# Framework of qlib-server
+# Framework of Qlib-Server
 
+<div style="align: center">
+<img src="docs/_static/img/framework.png" />
+</div>
+
+The `Client/Server` framework of `Qlib` is based on `WebSocket` considering its capability of **bidirectional communication** between client and server in **async** mode.
+
+`Qlib-Server` is based on [Flash](http://flask.pocoo.org/), which is a micro-framework for Python and here [Flask-SocketIO](https://flask-socketio.readthedocs.io) is used for websocket connection. 
 
 # Quick start
 
 
 ## Installation
 
+### One-click Deployment
 
-# More About qlib-server
+One-click deployment of `Qlib-Server` is supported, you can choose either of the following two methods for one-click deployment:
+
+- Deployment with `docker-compose`
+- Deployment in `Azure`
+
+#### One-click Deployment with `docker-compose`
+
+Deploy `Qlib-Server` with `docker-compose` according to the following processes:
+
+* Install `docker`, please refer to [Docker Installation](https://docs.docker.com/engine/install).
+* Install `docker-compose`, please refer to [Docker-compose Installation](https://docs.docker.com/compose/install/).
+- Run the following command to deploy `Qlib-Server`:
+
+    ```bash
+      git clone https://github.com/microsoft/qlib-server
+      cd qlib-server
+      sudo docker-compose -f docker_support/docker-compose.yaml --env-file docker_support/docker-compose.env build
+      sudo docker-compose -f docker_support/docker-compose.yaml --env-file docker_support/docker-compose.env up -d
+      # Use the following command to track the log
+      sudo docker-compose -f docker_support/docker-compose.yaml logs -f
+    ```
+
+One-click Deployment in `Azure`
+--------------------------------------------
+
+Firstly, You need to have an `Azure` account to deploy `Qlib-Server` in `Azure`. Then you can deploy `Qlib-Server` in `Azure` according to the following processes:
+
+* Install `azure-cli`, please refer to [install-azure-cli](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest).
+
+* Add the `Azure` account to the configuration file `azure_conf.yaml`
+
+    ```yaml
+        sub_id: Your Subscription ID
+        username: azure user name
+        password: azure password
+        # The resource group where the VM is located
+        resource_group: Resource group name
+    ```
+* Execute the deployment script
+    Run the following command:
+
+    ```bash
+
+        git clone https://github.com/microsoft/qlib-server
+        cd qlib-server/scripts
+        python azure_manager.py create_qlib_cs_vm \
+            --qlib_server_name test_server01 \
+            --qlib_client_names test_client01 \
+            --admin_username test_user \
+            --ssh_key_value ~/.ssh/id_rsa.pub \
+            --size standard_NV6_Promo\
+            --conf_path azure_conf.yaml
+    ```
+
+To know more about one-click Deployment, please refer to [Qlib-Server One-click Deplyment](https://qlib-server.readthedocs.io/en/latest/build.html#one-click-deployment).
+
+### Step-by-step Deployment
+
+To know more about step-by-step Deployment, please refer to [Qlib-Server Step-by-step Deplyment]https://qlib-server.readthedocs.io/en/latest/build.html#step-by-step-deployment).
+
+
+## Using `Qlib` in `Online` Mode
+
+In the [Qlib Document](https://qlib.readthedocs.io/en/latest), the `Offline` mode has been introduced. 
+
+With `Qlib-Server`, you can use `Qlib` in `Online` mode, please initialize `Qlib` with the following code:
+
+```python
+import qlib
+ONLINE_CONFIG = {
+    # data provider config
+    "calendar_provider": {"class": "LocalCalendarProvider", "kwargs": {"remote": True}},
+    "instrument_provider": "ClientInstrumentProvider",
+    "feature_provider": {"class": "LocalFeatureProvider", "kwargs": {"remote": True}},
+    "expression_provider": "LocalExpressionProvider",
+    "dataset_provider": "ClientDatasetProvider",
+    "provider": "ClientProvider",
+    # config it in user's own code
+    "provider_uri": "127.0.0.1:/",
+    # cache
+    # Using parameter 'remote' to announce the client is using server_cache, and the writing access will be disabled.
+    "expression_cache": None,
+    "dataset_cache": None,
+    "calendar_cache": None,
+    "mount_path": "/data/stock_data/qlib_data",
+    "auto_mount": True,  # The nfs is already mounted on our server[auto_mount: False].
+    "flask_server": "127.0.0.1",
+    "flask_port": 9710,
+    "region": "cn",
+}
+
+qlib.init(**client_config)
+ins = D.list_instruments(D.instrumetns("all"), as_list=True)
+
+```
+
+For more details, please refer to [Qlib-Server Client](https://qlib-server.readthedocs.io/en/latest/client.html).
+
+# More About Qlib-Server
 
 
 # Contributing

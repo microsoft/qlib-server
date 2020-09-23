@@ -1,6 +1,6 @@
 .. _build:
 ==============================
-``Qlib-Server`` Building
+``Qlib-Server`` Deployment
 ==============================
 
 Introduction
@@ -27,7 +27,7 @@ Deploy ``Qlib-Server`` with docker-compose according to the following processes:
 
 - Install ``docker``, please refer to `Docker Installation <https://docs.docker.com/engine/install>`_.
 - Install ``docker-compose``, please refer to `Docker-compose Installation <https://docs.docker.com/compose/install/>`_.
-- Run the following command to deploy `Qlib-Server`:
+- Run the following command to deploy ``Qlib-Server``:
 
     .. code-block:: bash
 

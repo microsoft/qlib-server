@@ -5,7 +5,7 @@ Using ``Qlib`` in ``Online`` Mode
 
 Introduction
 ================
-In the `Qlib document <https://qlib.readthedocs.io/en/latest>`_, the ``Offline`` mode has been introduced. In addition to ``offline`` mode, users can use ``Qlib`` in ``Online`` mode.
+In the `Qlib Document <https://qlib.readthedocs.io/en/latest>`_, the ``Offline`` mode has been introduced. In addition to ``offline`` mode, users can use ``Qlib`` in ``Online`` mode.
 
 The ``Online`` mode is designed to solve the following problems:
 

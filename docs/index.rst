@@ -5,12 +5,36 @@
 
 .. _user_guide:
 
+Document Structure
 ====================
+
+
+.. toctree::
+   :hidden:
+
+   Home <self>
+
+.. toctree::
+   :maxdepth: 3
+   :caption: INTRODUCTION:
+
+   Qlib-Server <server.rst>
+
 
 .. toctree::
     :maxdepth: 3
+    :caption: BUILDING:
 
-    server
-    build
-    client
-    changelog
+    Qlib-Server Deployment <build.rst>
+
+.. toctree::
+    :maxdepth: 3
+    :caption: USAGE:
+
+    Qlib Online Mode <client.rst>
+
+.. toctree::
+    :maxdepth: 3
+    :caption: CHANGELOG:
+
+    Changelog <changelog.rst>
