@@ -7,7 +7,7 @@ Introduction
 ================
 In the `Qlib document <TODO_URL>`_, the ``offline`` mode has been introduced. In addition to ``offline`` mode, users can use ``Qlib`` in ``online`` mode.
 
-The ``online`` mode is designed to solve the following problems:
+The ``Online`` mode is designed to solve the following problems:
 
 - Manage the data in a centralized way. Users don't have to manage data of different versions.
 - Reduce the amount of cache to be generated.

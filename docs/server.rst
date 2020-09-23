@@ -1,28 +1,36 @@
 .. _server:
-==========================
-``Qlib-Server`` Structure
-==========================
-
+=================================
+``Qlib Client/Server`` Framework 
+=================================
 .. currentmodule:: qlib_server
 
-The ``Client/Server structure`` of ``Qlib`` is based on WebSocket considering its capability of **bidirectional communication** between client and server in **async** mode.
+Introduction
+==================
 
-Server
-================
+The ``Client/Server`` framework of ``Qlib`` is based on ``WebSocket`` considering its capability of **bidirectional communication** between client and server in **async** mode.
 
-The server is based on `flask<http://flask.pocoo.org/>`_. Flask is a micro-framework for Python and here we use `flask-SocketIO<https://flask-socketio.readthedocs.io>`_ for websocket connection. The server provides the following functions:
+Framework
+==================
+
+.. image:: ./_static/img/framework.png
+    :alt: Framework
+
+
+``Qlib-Server`` is based on `Flash <http://flask.pocoo.org/>`_, which is a micro-framework for Python and here `Flask-SocketIO <https://flask-socketio.readthedocs.io>`_ is used for websocket connection. 
+
+``Qlib-Server`` provides the following procedures:
 
 Listening to incoming request from client
 --------------------------------------------
 
-The clients will propose several types of requests to server. The server will parse the requests, collect the identical requests from different clients, record their session-ids, and submit these parsed tasks to a pipe. ``Qlib`` use `RabbitMQ<https://www.rabbitmq.com>`_ as this pipe. The tasks will be published to a channel `task_queue`.
+The clients will propose several types of requests to server. The server will parse the requests, collect the identical requests from different clients, record their session-ids, and submit these parsed tasks to a pipe. ``Qlib`` use `RabbitMQ <https://www.rabbitmq.com>`_ as this pipe. The tasks will be published to a channel `task_queue`.
 
 **RequestListener** is used for this function:
 
 .. autoclass:: qlib_server.request_handler.RequestListener
 
 
-After receiving these requests, the server will check whether different clients are asking for the same data. If so, to prevent repeated generation of data or repeated generation of cache files, the server will use `redis<https://redis.io/>`_ to maintain the session-ids of those clients. These session-ids will be deleted once this task is finished. To avoid IO conflicts, `redis_lock<https://pypi.org/project/python-redis-lock/>`_ is imported to make sure no tasks in redis will be read and written at the same time.
+After receiving these requests, the server will check whether different clients are asking for the same data. If so, to prevent repeated generation of data or repeated generation of cache files, the server will use `Redis <https://redis.io/>`_ to maintain the session-ids of those clients. These session-ids will be deleted once this task is finished. To avoid IO conflicts, `Redis_Lock <https://pypi.org/project/python-redis-lock/>`_ is imported to make sure no tasks in redis will be read and written at the same time.
 
 Responding clients with data
 -------------------------------
