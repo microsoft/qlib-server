@@ -133,6 +133,17 @@ For more details, please refer to [Qlib-Server Client](https://qlib-server.readt
 
 # More About Qlib-Server
 
+The detailed documents are organized in docs. Sphinx and the readthedocs theme is required to build the documentation in html formats.
+
+```bash
+cd docs/
+conda install sphinx sphinx_rtd_theme -y
+# Otherwise, you can install them with pip
+# pip install sphinx sphinx_rtd_theme
+make html
+```
+
+You can also view the [latest document](https://qlib-server.readthedocs.io/en/latest/) online directly.
 
 # Contributing
 
