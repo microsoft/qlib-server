@@ -1,11 +1,11 @@
 
 =================================================
-Using ``Qlib`` in ``online`` Mode
+Using ``Qlib`` in ``Online`` Mode
 =================================================
 
 Introduction
 ================
-In the `Qlib document <TODO_URL>`_, the ``offline`` mode has been introduced. In addition to ``offline`` mode, users can use ``Qlib`` in ``online`` mode.
+In the `Qlib document <https://qlib.readthedocs.io/en/latest>`_, the ``Offline`` mode has been introduced. In addition to ``offline`` mode, users can use ``Qlib`` in ``Online`` mode.
 
 The ``Online`` mode is designed to solve the following problems:
 
@@ -13,9 +13,9 @@ The ``Online`` mode is designed to solve the following problems:
 - Reduce the amount of cache to be generated.
 - Make the data can be accessed in a remote way.
 
-In ``online`` mode, the data provided for ``Qlib`` will be managed in a centralized manner by ``Qlib-Server``.
+In ``Online`` mode, the data provided for ``Qlib`` will be managed in a centralized manner by ``Qlib-Server``.
 
-Using ``Qlib`` in ``online`` Mode
+Using ``Qlib`` in ``Online`` Mode
 =========================================
 
 Use ``Qlib`` in ``online`` mode according to the following steps:
