@@ -58,6 +58,8 @@ class RequestListener(threading.Thread):
     @staticmethod
     def check_version(v):
         ver = C.client_version
+        if v.lower().endswith(".dev"):
+            v = v[: -4]
         if version.parse(v) not in SpecifierSet(ver):
             raise Exception("Client version mismatch, please upgrade your qlib client ({})".format(ver))
 

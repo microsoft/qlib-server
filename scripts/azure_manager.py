@@ -98,6 +98,8 @@ class Remote:
             password (str): password, default None; If password is None, use ssh_key.
             ssh_private_key (Path, str): ssh public key path, default None; If ssh_key is None, use password.
         """
+        self._host = host
+        self._user = user
         if password is None and ssh_private_key is None:
             logger.warning("ssh_private_key and password are both none, ssh_private_key will use `~/.ssh/id_rsa`!")
             ssh_private_key = str(Path("~/.ssh/id_rsa").expanduser().resolve())
@@ -105,11 +107,11 @@ class Remote:
         if ssh_private_key is not None:
             ssh_key = str(Path(ssh_private_key).expanduser().resolve())
             connect_kwargs = {"key_filename": ssh_key}
-            self.conn = Connection(host=host, user=user, connect_kwargs=connect_kwargs)
+            self.conn = Connection(host=self._host, user=self._user, connect_kwargs=connect_kwargs)
         else:
             config = Config(overrides={"sudo": {"password": password}})
             connect_kwargs = {"password": password}
-            self.conn = Connection(host=host, user=user, connect_kwargs=connect_kwargs, config=config)
+            self.conn = Connection(host=self._host, user=self._user, connect_kwargs=connect_kwargs, config=config)
 
         self._home_dir = None
 
@@ -122,12 +124,12 @@ class Remote:
     def _execute_remote_shell(self, files, remote_dir=None):
         if remote_dir is None:
             remote_dir = self.home_dir
-        self.run(f"if [ ! -d {remote_dir} ]; then sudo mkdir -p {remote_dir}; fi")
+        self.mkdir_remote(remote_dir)
         if not isinstance(files, Iterable):
             files = [files]
 
         for file_path in map(lambda x: Path(x), files):
-            self.conn.put(str(file_path), remote_dir)
+            self.put(str(file_path), remote_dir)
             # NOTE: This place may require a password
             # Consider using `self.conn.sudo(f"/bin/bash /home/{user}/{shell_path.name}")` instead
             self.run(f"/bin/bash {remote_dir}/{file_path.name}")
@@ -143,8 +145,8 @@ class Remote:
         with temp_client_path.open("w") as fp:
             yaml.dump(obj, fp)
         # create remote dir
-        self.run(f"if [ ! -d {r_dir} ]; then sudo mkdir -p {r_dir}; fi")
-        self.conn.put(str(temp_client_path), r_dir)
+        self.mkdir_remote(r_dir)
+        self.put(str(temp_client_path), r_dir)
         # delete tmp file
         temp_client_path.unlink()
 
@@ -182,7 +184,7 @@ class Remote:
             client_config["auto_mount"] = False
             self._dump_remote_yaml(client_config, "~/qlib_client_config.yaml")
 
-    def run(self, command, hide=True):
+    def run(self, command, hide=None):
         """run command in remote server
 
         Parameters
@@ -190,9 +192,23 @@ class Remote:
         command : str
             command
         hide : bool, str
-            hide shell stdout or stderr, value from stdout/stderr/True, default True
+            hide shell stdout or stderr, value from stdout/stderr/True(stdout and stderr)/None(False), default None
         """
+        logger.info(f"remote {self._user}@{self._host} running command: {command}")
         return self.conn.run(command, hide=hide)
+
+    def put(self, local_path, remote_dir):
+        """put file to remote
+
+        Parameters
+        ----------
+        local_path: str
+            local file path
+        remote_dir: str
+            remote dir
+        """
+        logger.info(f"putting {local_path} ot {self._user}@{self._host}:{remote_dir}")
+        self.conn.put(local_path, remote_dir)
 
     def run_python(self, command, hide=True, sudo=False):
         """run python command
@@ -214,6 +230,21 @@ class Remote:
         if sudo:
             command = f"sudo {command}"
         return self.run(command, hide=hide)
+
+    def mkdir_remote(self, dir_path, sudo=True):
+        """mkdir dir in remote
+
+        Parameters
+        ----------
+        dir_path : str
+            remote dir path
+        sudo : bool
+            use sudo, value from True or False, by default True
+        """
+        if sudo:
+            self.run(f"if [ ! -d {dir_path} ]; then sudo mkdir -p {dir_path}; fi")
+        else:
+            self.run(f"if [ ! -d {dir_path} ]; then mkdir -p {dir_path}; fi")
 
 
 class CommandManager:
@@ -253,13 +284,26 @@ class CommandManager:
             # NOTE: China needs to be set `AzureChinaCloud` to login successfully
             subprocess.run("az cloud set -n AzureChinaCloud", shell=True)
 
-        login_cmd = f"az login -u '{self.username}' -p '{self.password}'"
-        if subprocess.check_call(login_cmd, shell=True, stdout=subprocess.DEVNULL) != 0:
-            raise ValueError("Invalid credential")
+        if subprocess.run("az account show", shell=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode != 0:
+            login_cmd = f"az login -u '{self.username}' -p '{self.password}'"
+            subprocess.check_call(login_cmd, shell=True, stdout=subprocess.DEVNULL)
 
         set_subscription_cmd = f"az account set --subscription {self.sub_id}"
-        if subprocess.check_call(set_subscription_cmd, shell=True, stdout=subprocess.DEVNULL) != 0:
-            raise ValueError("Invalid set subscription")
+        subprocess.check_call(set_subscription_cmd, shell=True, stdout=subprocess.DEVNULL)
+
+    def _azure_run(self, command, output=False, stdout=None, stderr=None):
+        """run command in azure-cli
+
+        Parameters
+        ----------
+        command : str
+            shell command
+        """
+        if not command.startswith("az "):
+            command = f"az {command}"
+        command = f"{command} -g {self.resource_group}"
+        logger.info(f"running: {command}")
+        return subprocess.check_output(command, shell=True) if output else subprocess.run(command, shell=True, stdout=stdout, stderr=stderr)
 
     def start(self, *vm_names):
         """start vm
@@ -280,7 +324,7 @@ class CommandManager:
         """
         logger.info(vm_names)
         for name in vm_names:
-            subprocess.run(f"az vm start -n {name} -g {self.resource_group}", shell=True)
+            self._azure_run(f"vm start -n {name}")
 
     def stop(self, *vm_names):
         """stop vm
@@ -302,21 +346,22 @@ class CommandManager:
 
         logger.info(vm_names)
         for name in vm_names:
-            subprocess.run(f"az vm deallocate -n {name} -g {self.resource_group}", shell=True)
+            self._azure_run(f"vm deallocate -n {name}")
 
     def _list(self, only_running=False):
-        output = subprocess.check_output(f"az vm list -d -g {self.resource_group}", shell=True)
+        output = self._azure_run(f"vm list -d", output=True)
         ret = json.loads(output)
         vmm = VMManager(ret)
         for vm in vmm.list(only_running=only_running):
             yield vm
 
     def _list_ip(self, vm_name=None, ip_type="private"):
-        cmd_str = "az vm list-ip-addresses"
+        logger.info(f"ip_type={ip_type}")
+        cmd_str = "vm list-ip-addresses"
         if vm_name is not None:
             cmd_str = f"{cmd_str} --name {vm_name}"
 
-        output = subprocess.check_output(cmd_str, shell=True)
+        output = self._azure_run(cmd_str, output=True)
         ret = json.loads(output)
         vmm = VMManager(ret)
         for vm in vmm.list_ip(ip_type=ip_type):
@@ -366,7 +411,7 @@ class CommandManager:
             $ python azure_manager.py view --only_running --config_path azure_conf.yaml --region cn
 
         """
-        subprocess.run("az vm list -d", shell=True)
+        self._azure_run("vm list -d")
 
     def create_vm(
         self,
@@ -419,12 +464,15 @@ class CommandManager:
         if ssh_key_value is None and admin_password is None:
             logger.error("ssh_key_value and admin_password cannot be none at the same time!")
             return
-        shell = f"az vm create -g {self.resource_group} --image {image} --size {size} --admin-username {admin_username} --public-ip-address-allocation {public_ip_address_allocation} "
+        shell = f"vm create --image {image} --size {size} --admin-username {admin_username} --public-ip-address-allocation {public_ip_address_allocation} "
         if vnet_name:
             shell += f"--vnet-name {vnet_name} "
         if nsg:
             shell += f"--nsg {nsg} "
         if ssh_key_value:
+            ssh_key_path = Path(ssh_key_value).expanduser().resolve()
+            if ssh_key_path.exists():
+                ssh_key_value = str(ssh_key_path)
             shell += f"--ssh-key-value {ssh_key_value} "
         if admin_password:
             shell += f"--admin-password {admin_password} "
@@ -432,7 +480,7 @@ class CommandManager:
         for name in vm_names.split(","):
             name = name.strip()
             logger.info(f"create vm: {name}...")
-            subprocess.run(shell + f"-n {name}", shell=True)
+            self._azure_run(shell + f"-n {name}")
             logger.info(f"create vm finished: {name}")
 
     def create_qlib_cs_vm(

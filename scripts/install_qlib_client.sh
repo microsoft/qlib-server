@@ -10,22 +10,25 @@ CODE_DIR=$HOME/"code"
 DOWNLOADS_DIR=$HOME/"downloads"
 CONDA_DIR=$HOME/"miniconda3"
 
+
 # create dir
-if [ ! -d "$CONDA_DIR" ]; then
-        mkdir $CONDA_DIR
-fi
+function create_dir_by_sudo() {
+    if [ ! -d $1 ]; then
+            sudo mkdir -p $1
+    fi
+}
 
-if [ ! -d "$CODE_DIR" ]; then
-        mkdir $CODE_DIR
-fi
+function create_dir() {
+    if [ ! -d $1 ]; then
+            mkdir $1
+    fi
+}
 
-if [ ! -d "$DOWNLOADS_DIR" ]; then
-        mkdir $DOWNLOADS_DIR
-fi
 
-if [ ! -d "$STOCK_DATA_DIR" ]; then
-        sudo mkdir -p $STOCK_DATA_DIR
-fi
+create_dir $CONDA_DIR
+create_dir $CODE_DIR
+create_dir $DOWNLOADS_DIR
+create_dir_by_sudo $STOCK_DATA_DIR
 
 # install miniconda3
 wget $MINICONDA -O $DOWNLOADS_DIR/"miniconda3.sh"

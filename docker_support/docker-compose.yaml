@@ -23,7 +23,7 @@ services:
     restart: always
   qlib-server:
     build: 
-      context: .
+      context: ../
       dockerfile: ./docker_support/Dockerfile
       args:
         - QUEUE_HOST=rabbitmq
@@ -32,6 +32,7 @@ services:
         - QUEUE_PASS=${RABBITMQ_DEFAULT_PASS}
         - QLIB_DATA=${QLIB_DATA}
         - FLASK_SERVER_HOST=${FLASK_SERVER_HOST}
+        - QLIB_CODE=${QLIB_CODE}
     volumes:
       - ${QLIB_DATA}:${QLIB_DATA}
     depends_on:
