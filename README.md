@@ -28,7 +28,7 @@ With `Qlib-Server`, you can use `Qlib` in `Online` mode. The `Online` mode is de
 
 The `Client/Server` framework of `Qlib` is based on `WebSocket` considering its capability of **bidirectional communication** between client and server in **async** mode.
 
-`Qlib-Server` is based on [Flash](http://flask.pocoo.org/), which is a micro-framework for Python and here [Flask-SocketIO](https://flask-socketio.readthedocs.io) is used for websocket connection. 
+`Qlib-Server` is based on [Flask](http://flask.pocoo.org/), which is a micro-framework for Python and here [Flask-SocketIO](https://flask-socketio.readthedocs.io) is used for websocket connection. 
 
 # Quick start
 
