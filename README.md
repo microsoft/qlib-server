@@ -1,13 +1,10 @@
-`Qlib-Server` is the data server system for [`Qlib`](https://github.com/microsoft/qlib). It enable `Qlib` to run in online mode. Under online mode, the data will be deployed as a shared data service. The data and their cache will be shared by all the clients. The data retrieval performance is expected to be improved due to a higher rate of cache hits. It will consume less disk space, too.
+`Qlib-Server` is the data server system for [`Qlib`](https://github.com/microsoft/qlib). It enable `Qlib` to run in `online` mode. Under online mode, the data will be deployed as a shared data service. The data and their cache will be shared by all the clients. The data retrieval performance is expected to be improved due to a higher rate of cache hits. It will consume less disk space, too.
 
+To sum up, `Qlib-Server` is designed to solve the following problems:
 
-`Qlib-server` utilizes `Qlib` for basic calculations and provides extensive server system and cache mechanism. With `Qlib-Server`, the data provided for `Qlib` can be managed in a centralized manner.
-
-With `Qlib-Server`, you can use `Qlib` in `Online` mode. The `Online` mode is designed to solve the following problems:
-
-* Manage the data in a centralized way. You don't have to manage data of different versions.
+* Manage the data in a centralized way, which makes data management (including cache management, date updating) much easier.
 * Reduce the amount of cache to be generated.
-* Make the data can be accessed in a remote way.
+* Make the client light-weighted and leverage the powerful computing resources of remote server
 
 
 - [Framework of qlib-erver](#framework-of-qlib-server)

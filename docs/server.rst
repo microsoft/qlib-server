@@ -20,7 +20,7 @@ The ``Client/Server`` framework of ``Qlib`` is based on ``WebSocket`` considerin
 
 
 
-``Qlib-Server`` is based on `Flash <http://flask.pocoo.org/>`_, which is a micro-framework for Python and here `Flask-SocketIO <https://flask-socketio.readthedocs.io>`_ is used for websocket connection. 
+``Qlib-Server`` is based on `Flask <http://flask.pocoo.org/>`_, which is a micro-framework for Python and here `Flask-SocketIO <https://flask-socketio.readthedocs.io>`_ is used for websocket connection. 
 
 ``Qlib-Server`` provides the following procedures:
 
