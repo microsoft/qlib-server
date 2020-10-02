@@ -71,8 +71,7 @@ Firstly, You need to have an `Azure` account to deploy `Qlib-Server` in `Azure`.
         # The resource group where the VM is located
         resource_group: Resource group name
     ```
-* Execute the deployment script
-    Run the following command:
+* Execute the deployment script by running the following command:
 
     ```bash
 
