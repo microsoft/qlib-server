@@ -7,7 +7,7 @@ To sum up, `Qlib-Server` is designed to solve the following problems:
 * Make the client light-weighted and leverage the powerful computing resources of remote server
 
 
-- [Framework of qlib-erver](#framework-of-qlib-server)
+- [Framework of qlib-server](#framework-of-qlib-server)
 - [Quick start](#quick-start)
   - [Deployment](#deployment)
     - [One-click Deployment](#one-click-deployment)
