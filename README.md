@@ -53,7 +53,7 @@ Deploy `Qlib-Server` with `docker-compose` according to the following processes:
       sudo docker-compose -f docker_support/docker-compose.yaml --env-file docker_support/docker-compose.env build
       sudo docker-compose -f docker_support/docker-compose.yaml --env-file docker_support/docker-compose.env up -d
       # Use the following command to track the log
-      sudo docker-compose -f docker_support/docker-compose.yaml logs -f
+      sudo docker-compose -f docker_support/docker-compose.yaml --env-file docker_support/docker-compose.env logs -f
     ```
 
 #### One-click Deployment in `Azure`
