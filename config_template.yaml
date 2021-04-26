@@ -4,13 +4,13 @@ flask_port: 9710
 queue_host: <QUEUE_HOST>
 queue_user: <QUEUE_USER>
 queue_pwd: <QUEUE_PASS>
-task_queue: 'task_queue'
-message_queue: 'message_queue'
+task_queue: <TASK_QUEUE>
+message_queue: <MESSAGE_QUEUE>
 max_concurrency: 10
 max_process: 10
 redis_host: <REDIS_HOST>
-redis_port: 6379
-redis_task_db: 1
+redis_port: <REDIS_PORT>
+redis_task_db: <REDIS_DB>
 auto_update: 0
 update_time: '23:45'
 client_version: '>=0.4.0'

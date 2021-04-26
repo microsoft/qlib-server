@@ -378,6 +378,8 @@ Build ``Qlib-Server`` with Dockerfile according to the following processes:
                 QUEUE_USER=rabbitmq_user \
                 QUEUE_PASS=rebbitmq_password \
                 FLASK_SERVER_HOST=127.0.0.1 \
-                QLIB_CODE=/code
+                QLIB_CODE=/code\
+                REDIS_PORT=6379\
+                REDIS_DB=1
         sudo docker run qlib-server
 

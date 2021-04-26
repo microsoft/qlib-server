@@ -21,6 +21,8 @@ services:
   redis:
     image: redis:alpine3.12
     restart: always
+    ports:
+      - ${EXPORT_REDIS_PORT}:6379
   qlib-server:
     build: 
       context: ../
@@ -33,6 +35,8 @@ services:
         - QLIB_DATA=${QLIB_DATA}
         - FLASK_SERVER_HOST=${FLASK_SERVER_HOST}
         - QLIB_CODE=${QLIB_CODE}
+        - REDIS_DB=${REDIS_DB}
+        - REDIS_PORT=6379
     volumes:
       - ${QLIB_DATA}:${QLIB_DATA}
     depends_on:
@@ -41,6 +45,6 @@ services:
       - nfs-server
     restart: always
     ports:
-      - 9710:9710
+      - ${QLIB_SERVER_PORT}:9710
     command: ["./wait-for-it/wait-for-it.sh", rabbitmq:15672, "--", "python", "main.py", "-c", "config_template.yaml"]
 
