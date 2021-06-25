@@ -36,7 +36,7 @@ Deploy ``Qlib-Server`` with docker-compose according to the following processes:
         sudo docker-compose -f docker_support/docker-compose.yaml --env-file docker_support/docker-compose.env build
         sudo docker-compose -f docker_support/docker-compose.yaml --env-file docker_support/docker-compose.env up -d
         # Use the following command to track the log
-        sudo docker-compose -f docker_support/docker-compose.yaml logs -f
+        sudo docker-compose -f docker_support/docker-compose.yaml --env-file docker_support/docker-compose.env logs -f
 
 
 One-click Deployment in ``Azure``
@@ -62,9 +62,9 @@ Deploy ``Qlib-Server`` in ``Azure`` according to the following processes:
         resource_group: Resource group name
 
 - Execute the deployment script
-    Run the following command:
+    - Run the following command:
 
-    .. code-block::
+    .. code-block:: bash
 
         git clone https://github.com/microsoft/qlib-server
         cd qlib-server/scripts
@@ -76,9 +76,9 @@ Deploy ``Qlib-Server`` in ``Azure`` according to the following processes:
             --size standard_NV6_Promo\
             --conf_path azure_conf.yaml
 
-    To know more about parameters, please run the following command:
+    - To know more about parameters, please run the following command:
 
-    .. code-block:: 
+    .. code-block:: bash
 
         python azure_manager.py create_qlib_cs_vm -- --help
 
