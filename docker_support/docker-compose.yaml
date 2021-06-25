@@ -10,7 +10,6 @@ services:
     environment:
       - SHARED_DIRECTORY=/nfsshare
     ports:
-      - "111:111/udp"
       - "2049:2049"
   rabbitmq:
     image: rabbitmq:3.7.27-rc.1-management-alpine
