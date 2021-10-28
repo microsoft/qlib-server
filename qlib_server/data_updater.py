@@ -27,7 +27,7 @@ class DataUpdater(object):
         - update cache files
     """
 
-    def __init__(self, is_interface=False, update_interval=24, max_workers=20):
+    def __init__(self, is_interface=False, update_interval=24, max_workers=20, freq: str = "day"):
         """
 
         Parameters
@@ -44,6 +44,7 @@ class DataUpdater(object):
         self.is_interface = is_interface
         self.update_interval = update_interval
         self.max_workers = max_workers
+        self.freq = freq
 
     @staticmethod
     def _update_expression_cache(cache_file):
@@ -61,7 +62,7 @@ class DataUpdater(object):
         from qlib.data.data import ExpressionD
 
         try:
-            expression_cache_dir = ExpressionD.expr_cache_path
+            expression_cache_dir = ExpressionD.get_cache_dir(self.freq)
         except AttributeError as e:
             self.logger.error("No cache mechanism detected: \n{}\n".format(traceback.format_exc()))
             return
@@ -85,7 +86,7 @@ class DataUpdater(object):
         from qlib.data.data import DatasetD
 
         try:
-            dataset_cache_dir = DatasetD.dtst_cache_path
+            dataset_cache_dir = DatasetD.get_cache_dir(self.freq)
         except AttributeError as e:
             self.logger.error("No cache mechanism detected: \n{}\n".format(traceback.format_exc()))
             return
