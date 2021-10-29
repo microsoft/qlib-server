@@ -27,16 +27,14 @@ RUN apt-get --allow-releaseinfo-change update\
     && pip install -U python-engineio==3.11.2 python-socketio==4.4.0 flask-socketio==3.1.2\
     && /bin/sed -i "s@<QLIB_DATA>@$QLIB_DATA@g" config_template.yaml\
     && /bin/sed -i "s@<QUEUE_HOST>@$QUEUE_HOST@g" config_template.yaml\
-    && /bin/sed -i "s@<REDIS_HOST>@$REDIS_HOST@g" config_template.yaml\
-    && /bin/sed -i "s@<REDIS_PORT>@$REDIS_PORT@g" config_template.yaml\
-    && /bin/sed -i "s@<REDIS_DB>@$REDIS_DB@g" config_template.yaml\
     && /bin/sed -i "s@<QUEUE_USER>@$QUEUE_USER@g" config_template.yaml\
     && /bin/sed -i "s@<QUEUE_PASS>@$QUEUE_PASS@g" config_template.yaml\
     && /bin/sed -i "s@<TASK_QUEUE>@$TASK_QUEUE@g" config_template.yaml\
     && /bin/sed -i "s@<MESSAGE_QUEUE>@$MESSAGE_QUEUE@g" config_template.yaml\
+    && /bin/sed -i "s@<REDIS_HOST>@$REDIS_HOST@g" config_template.yaml\
+    && /bin/sed -i "s@<REDIS_PORT>@$REDIS_PORT@g" config_template.yaml\
+    && /bin/sed -i "s@<REDIS_DB>@$REDIS_DB@g" config_template.yaml\
     && /bin/sed -i "s@<FLASK_SERVER_HOST>@$FLASK_SERVER_HOST@g" config_template.yaml\
-    && /bin/sed -i "s@<TASK_QUEUE>@task_queue:$QLIB_DATA@g" config_template.yaml\
-    && /bin/sed -i "s@<MESSAGE_QUEUE>@message_queue:$QLIB_DATA@g" config_template.yaml\
     && git clone https://github.com/vishnubob/wait-for-it.git
 
 EXPOSE 9710
