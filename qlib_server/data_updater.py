@@ -100,7 +100,9 @@ class DataUpdater(object):
         error_info = []
         warning_info = []
         with tqdm(total=cache_length) as p_bar:
-            with ProcessPoolExecutor(max_workers=self.max_workers) as executor:
+            with ProcessPoolExecutor(
+                max_workers=1 if "dataset_cache" in worker_fun.__name__ else self.max_workers
+            ) as executor:
                 futures_map = {}
                 for cache_path in cache_path_list:
                     futures_map[executor.submit(worker_fun, cache_path)] = cache_path
