@@ -1,16 +1,6 @@
 version: '3'
 
 services:
-  nfs-server:
-    image: itsthenetwork/nfs-server-alpine:12
-    privileged: true
-    restart: always
-    volumes:
-      - ${QLIB_DATA}:/nfsshare
-    environment:
-      - SHARED_DIRECTORY=/nfsshare
-    ports:
-      - "2049:2049"
   rabbitmq:
     image: rabbitmq:3.7.27-rc.1-management-alpine
     restart: always
@@ -41,7 +31,6 @@ services:
     depends_on:
       - redis
       - rabbitmq
-      - nfs-server
     restart: always
     ports:
       - ${QLIB_SERVER_PORT}:9710
