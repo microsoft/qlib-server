@@ -124,7 +124,7 @@ ONLINE_CONFIG = {
 }
 
 qlib.init(**client_config)
-ins = D.list_instruments(D.instrumetns("all"), as_list=True)
+ins = D.list_instruments(D.instruments("all"), as_list=True)
 
 ```
 
