@@ -5,7 +5,7 @@ from __future__ import division
 from __future__ import print_function
 
 import time
-import pickle
+import json
 import threading
 from packaging import version
 from flask import Flask, request
@@ -84,7 +84,7 @@ class RequestListener(threading.Thread):
         self.channel.basic_publish(
             exchange="",
             routing_key=C.task_queue,
-            body=pickle.dumps(dict({"meta": {"type": task_type, "ssid": client_ssid}, "args": request_body})),
+            body=json.dumps({"meta": {"type": task_type, "ssid": client_ssid}, "args": request_body}).encode("utf-8"),
         )
         time_logger.debug("finish publishing task to queue at %f" % time.time())
 
@@ -134,17 +134,15 @@ class RequestListener(threading.Thread):
         self.channel.basic_publish(
             exchange="",
             routing_key=C.message_queue,
-            body=pickle.dumps(
-                dict(
-                    {
-                        "type": message_type,
-                        "data": message_body,
-                        "ssids": [ssid],
-                        "status": status_code,
-                        "detailed_info": detailed_info,
-                    }
-                )
-            ),
+            body=json.dumps(
+                {
+                    "type": message_type,
+                    "data": message_body,
+                    "ssids": [ssid],
+                    "status": status_code,
+                    "detailed_info": detailed_info,
+                }
+            ).encode("utf-8"),
         )
 
     def on_calendar_request_received(self, calendar_request_body):
@@ -162,7 +160,7 @@ class RequestListener(threading.Thread):
             }
         """
         time_logger.debug("receive request at %f" % time.time())
-        body = pickle.loads(calendar_request_body["body"])
+        body = json.loads(calendar_request_body["body"])
         self.logger.info("Received calendar request from client: %.200s" % body)
         try:
             self.check_version(calendar_request_body["head"]["version"])
@@ -188,7 +186,7 @@ class RequestListener(threading.Thread):
             }
         """
         time_logger.debug("receive request at %f" % time.time())
-        body = pickle.loads(instrument_request_body["body"])
+        body = json.loads(instrument_request_body["body"])
         self.logger.info("Received instrument request from client: %.200s" % body)
         try:
             self.check_version(instrument_request_body["head"]["version"])
@@ -215,7 +213,7 @@ class RequestListener(threading.Thread):
             }
         """
         time_logger.debug("receive calendar request at %f" % time.time())
-        body = pickle.loads(feature_request_body["body"])
+        body = json.loads(feature_request_body["body"])
         self.logger.info("Received feature request from client: %.200s" % body)
         try:
             self.check_version(feature_request_body["head"]["version"])
@@ -263,7 +261,7 @@ class RequestResponder(threading.Thread):
                   the message is successfully consumed.
         """
         time_logger.debug("receive message from queue at %f" % time.time())
-        mbody = pickle.loads(body)
+        mbody = json.loads(body.decode("utf-8"))
         mtype = mbody["type"]
         mssids = mbody["ssids"]
         mdata = mbody["data"]
