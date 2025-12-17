@@ -1,4 +1,5 @@
 provider_uri: <QLIB_DATA>
+region: <REGION>
 flask_server: <FLASK_SERVER_HOST>
 flask_port: 9710
 queue_host: <QUEUE_HOST>
@@ -62,3 +63,4 @@ logging_config:
   root:
     handlers:
       - others
+

@@ -33,7 +33,7 @@ if not _QLIB_INSTALLED:
 REQUIRED = [
     "Flask>=1.0.2",
     "Flask-SocketIO>=3.1.2",
-    "gevent>=1.3.7",
+    "gevent<23",
     "pika>=0.12.0",
     "redis>=3.0.1",
     "python-redis-lock>=3.3.1",
@@ -42,6 +42,10 @@ REQUIRED = [
     "fabric2",
     "loguru",
     "fire",
+    # wsproto is a dependency of qlib.
+    # Installing too high a version of wsproto will result in incompatibility with lower versions of python,
+    # so we'll lower the version of wsproto here.
+    "wsproto<1.2",
 ]
 
 here = os.path.abspath(os.path.dirname(__file__))
