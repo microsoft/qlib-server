@@ -5,7 +5,7 @@ from __future__ import division
 from __future__ import print_function
 
 import time
-import pickle
+import json
 import threading
 import multiprocessing
 
@@ -48,7 +48,7 @@ class DataProcessor(threading.Thread):
         The message is published in the format as below:
         For calendar task:
 
-        .. code-block:: pickle
+        .. code-block:: json
 
             {
                 'type': 'calendar',
@@ -60,7 +60,7 @@ class DataProcessor(threading.Thread):
 
         For instrument task:
 
-        .. code-block:: pickle
+        .. code-block:: json
 
             {
                 'type': 'instrument',
@@ -72,7 +72,7 @@ class DataProcessor(threading.Thread):
 
         For feature task:
 
-        .. code-block:: pickle
+        .. code-block:: json
 
             {
                 'type': 'feature',
@@ -90,7 +90,7 @@ class DataProcessor(threading.Thread):
         self.msg_channel.basic_publish(
             exchange="",
             routing_key=C.message_queue,
-            body=pickle.dumps(
+            body=json.dumps(
                 dict(
                     {
                         "type": message_type,
@@ -106,7 +106,7 @@ class DataProcessor(threading.Thread):
     @staticmethod
     def clear_task(body):
         """Callback function when initialize rabbitmq."""
-        tbody = pickle.loads(body)
+        tbody = json.loads(body.decode("utf-8"))
         ttype = tbody["meta"]["type"]
         task_uri = D._uri(ttype, **(tbody["args"]))
         # delete task
@@ -120,7 +120,7 @@ class DataProcessor(threading.Thread):
         `self.channel.basic_qos(prefetch_count=1)` is used to control the maximum concurrency of data processing process.
         """
         self.logger.debug("Receive task from queue at %f" % time.time())
-        tbody = pickle.loads(body)
+        tbody = json.loads(body.decode("utf-8"))
         ttype = tbody["meta"]["type"]
         ssid = tbody["meta"]["ssid"]
         self.logger.info("receive %s task : '%.200s'" % (ttype, tbody))

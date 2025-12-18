@@ -58,9 +58,8 @@ class RequestListener(threading.Thread):
     @staticmethod
     def check_version(v):
         ver = C.client_version
-        if v.lower().endswith(".dev"):
-            v = v[: -4]
-        if version.parse(v) not in SpecifierSet(ver):
+        spec = SpecifierSet(ver)
+        if not spec.contains(version.parse(v), prereleases=True):
             raise Exception("Client version mismatch, please upgrade your qlib client ({})".format(ver))
 
     def publish_task(self, task_type, request_body, client_ssid):

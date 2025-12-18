@@ -125,4 +125,5 @@ def init(conf, logging_config=None):
         redis_task_db=C["redis_task_db"],
         redis_port=C["redis_port"],
         redis_host=C["redis_host"],
+        region=C["region"],
     )

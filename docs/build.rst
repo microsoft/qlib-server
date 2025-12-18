@@ -322,6 +322,8 @@ Build ``Qlib-Server`` with source code according to the following processes:
     
     - `provider_uri`
         ``Qlib`` data directory
+    - `region`
+        The region of the data, currently supports ``cn`` and ``us``
     - `flask_server`
         Flask server host/ip, can be ``0.0.0.0`` or ``private ip``
     - `flask_port`
